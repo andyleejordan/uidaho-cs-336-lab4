@@ -65,6 +65,14 @@ credentials for both Ubuntu users and the mysql user.
 
 
 * Abstract
+The purpose of this report is to detail the implications of cross-site
+request forgery(CSRF) vulnerabilities. The CSRF attack detailed in
+this lab allows a malicious site to inject an HTTP request into a
+trusted site's active user session in order to impersonate the user
+and forge their input. Beyond exploring the threat this vulnerability
+represents, this report details a countermeasure, involving validating
+a secret token, that may be used in order to secure a site against
+this type of attack.
 
 * Problem and Background
 
