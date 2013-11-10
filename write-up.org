@@ -267,6 +267,36 @@ the target URL, which in turn edit's the users profile because the
 destination server cannot distinguish the forged request because it
 trusts (through the browser's cookie) the user's authentication.
 
+** Task 2: Implementing a countermeasure for Collabtive
+Because cross-site request forgeries depend on the server blindly
+reauthenticating the user through their cookie (which is obviously
+quite vulnerable), protecting a web application from an CSRF attack is
+actually quite easy. It simply requires implementation better
+authentication. The method the lab instructs us to use is that of
+secret-token authentication: our edit user form can include a hidden
+field with a secret ID (normally the value of the session cookie),
+which the server can use to validate an incoming POST request. If the
+request does not have the SID, or it does not match, the server can
+reject the request and thus deny the attack.
+
+To implement this, first we add the following code into edit user form
+template file located at
+`/var/www/CSRF/Collabtive/templates/standard/edituserform.tpl`.
+
+#+begin_src html
+...
+  <input type = "hidden" name = "sid" value = "" />
+...
+  <button type="submit" onclick="this.form.sid.value = document.cookie"
+    onfocus="this.blur()">{#send#}</button>
+...
+#+end_src
+
+This adds the hidden input 'sid', and on the clock of the form send
+button, assigns the value of the session cookie to the value of the
+sid input.
+
+Next we need to implement the SID validation.
 * Code
 
 * Answers
