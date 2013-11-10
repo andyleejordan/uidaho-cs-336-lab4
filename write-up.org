@@ -71,6 +71,123 @@ credentials for both Ubuntu users and the mysql user.
 * Problem Detail
 
 * Tasks
+** Task #1: Modifying the Victim's Profile
+Before we can modify the victim's profile, we need to capture a POST
+request of the user submitting the edit profile form (as it is this
+request we will be forging). To do this, we opened up Collabtive,
+logged in as "bob", navigated to the edit profile form, opened the
+Live HTTP Headers extension, cleared it, submitted the form, and went
+back to the extension, which captured the initial POST request for us
+(in addition to all the subsequent GET requests made by the browser
+drawing the new page). The captured POST request is reproduced here,
+with the GET requests removed for brevity.
+
+#+begin_src txt
+http://localhost/CSRF/Collabtive/manageuser.php?action=edit
+
+POST /CSRF/Collabtive/manageuser.php?action=edit HTTP/1.1 Host:
+localhost User-Agent: Mozilla/5.0 (X11; Linux i686; rv:5.0)
+Gecko/20100101 Firefox/5.0 Accept:
+text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-us,en;q=0.5 Accept-Encoding: gzip, deflate
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7 Connection: keep-alive
+Referer:
+http://localhost/CSRF/Collabtive/manageuser.php?action=editform&id=3
+Cookie: PHPSESSID=88n5386bqoes4rs843oviuh731 Content-Type:
+multipart/form-data;
+boundary=---------------------------20367708811588547619618939618
+Content-Length: 2265
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="name"
+
+bob -----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="userfile"; filename=""
+Content-Type: application/octet-stream
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="file-$myprojects[project].ID"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="company"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="email"
+
+bob@example.com
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="web"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="tel1"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="tel2"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="address1"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="zip"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="address2"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="country"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="state"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="gender"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="locale"
+
+en -----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="admin"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="oldpass"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="newpass"
+
+
+-----------------------------20367708811588547619618939618
+Content-Disposition: form-data; name="repeatpass"
+
+
+-----------------------------20367708811588547619618939618--
+
+HTTP/1.1 302 Found Date: Sun, 10 Nov 2013 02:02:32 GMT Server:
+Apache/2.2.17 (Ubuntu) X-Powered-By: PHP/5.3.5-1ubuntu7.2 Expires:
+Thu, 19 Nov 1981 08:52:00 GMT Cache-Control: no-store, no-cache,
+must-revalidate, post-check=0, pre-check=0 Pragma: no-cache Location:
+http://localhost/CSRF/Collabtive/manageuser.php?action=profile&id=3&mode=edited
+Content-Encoding: gzip Vary: Accept-Encoding Content-Length: 26
+Keep-Alive: timeout=15, max=100 Connection: Keep-Alive Content-Type:
+text/html; charset=utf-8
+----------------------------------------------------------
+#+end_src
+
+With the captured request, we now have the information (namely the
+requests' structure and its reference to the session cookie) required
+for us to forge a new one.
 
 * Code
 
