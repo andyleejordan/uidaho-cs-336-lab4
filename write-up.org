@@ -11,7 +11,7 @@
 | Long Date:         | Tuesday, 10 November 2013         |
 | Author Names:      | Andrew Schwartzmeyer, Shea Newton |
 
-* TODO LA-04 NetSec  ::noexport::
+* DONE LA-04 NetSec						 ::noexport::
    DEADLINE: <2013-11-10 Sun>
 For this laboratory assignment please follow the instructions in the
 laboratory in the link below and for preparing your laboratory report
@@ -85,7 +85,7 @@ CSRF attacks involve three players, a victim, a site the victim trusts
 and a malicious site. The key to this type of attack is a victim
 visiting the malicious site while logged into an active session with
 their trusted site. The malicious site is able to forge the HTTP GET
-and HTTP POST requests in order to impersonate or "comprimise the
+and HTTP POST requests in order to impersonate or "compromise the
 integrity" of the trusted site. [DU 3]
 
 * Problem Detail
@@ -105,7 +105,10 @@ generates a hidden form with our forged input, and sends it via a POST
 request initiated through a JavaScript function call. If this site
 were accidentally loaded by the user (say, through a malicious
 advertisement), then our forged request would be sent to the server
-and look just as if it was a valid request made by the user.
+and look just as if it was a valid request made by the user. If the
+site was vulnerable to GET requests (that is, our attack avenue was
+through any vulnerable tag that is not "form"), then we wouldn't even
+need JavaScript, as GET request is much easier to make.
 
 CSRF attacks are easily mitigated through better authentication
 techniques. In this lab we explore the use of a secret-token, passed
@@ -244,7 +247,7 @@ text/html; charset=utf-8
 With the captured request, we now have the information (namely the
 requests' structure) required for us to forge a new one. Next we need
 to make an HTML page for our attack, with a hidden form filled with
-our desired changes, and some embedded Javascript to submit it through
+our desired changes, and some embedded JavaScript to submit it through
 a POST request.
 
 #+begin_src html
@@ -297,13 +300,13 @@ a POST request.
 
 Now if we login to a user (we chose 'bob'), and then in a separate
 browser tab open the attack code at
-http://localhost/CSRF/Attack/index.html, our cross-site request
+"http://localhost/CSRF/Attack/index.html", our cross-site request
 forgery will change bob's name to 'notbob', transgender him, and
 assign him to our company 'seed'. This is done when the csrf_hack()
 JavaScript function is called (on page load through the
 'window.onload' hook), which adds our three HTML form inputs to a
 fields variable, and submits this and the attack URL
-('http://localhost/CSRF/Collabtive/manageuser.php?action=edit') to the
+("http://localhost/CSRF/Collabtive/manageuser.php?action=edit") to the
 function post(), which creates an HTML form element on the document
 and puts it into a temporary variable, assigns the url to the action
 of the element, puts the value of fields into the element's inner
@@ -318,7 +321,7 @@ trusts (through the browser's cookie) the user's authentication.
 ** Task 2: Implementing a countermeasure for Collabtive
 
 Because cross-site request forgeries depend on the server blindly
-reauthenticating the user through their cookie (which is obviously
+re-authenticating the user through their cookie (which is obviously
 quite vulnerable), protecting a web application from an CSRF attack is
 actually quite easy. It simply requires implementation better
 authentication. The method the lab instructs us to use is that of
@@ -326,13 +329,14 @@ secret-token authentication: our edit user form can include a hidden
 field with a secret ID (normally the value of the session cookie),
 which the server can use to validate an incoming POST request. If the
 request does not have the SID, or it does not match, the server can
-reject the request and thus deny the attack.
+reject the request and thus deny the attack. [Du 4]
 
 To implement this, first we add the following code into edit user form
 template file located at
-`/var/www/CSRF/Collabtive/templates/standard/edituserform.tpl`.
+"/var/www/CSRF/Collabtive/templates/standard/edituserform.tpl".
 
 #+begin_src html
+  <!-- Unmodified code removed for brevity -->
 ...
   <input type = "hidden" name = "sid" value = "" />
 ...
@@ -341,12 +345,12 @@ template file located at
 ...
 #+end_src
 
-This adds the hidden input 'sid', and on the click of the form send
+This adds the hidden input 'sid', and, on the click of the form send
 button, assigns the value of the session cookie to the value of the
 sid input.
 
 Next we need to implement the SID validation. In the file
-`/var/www/CSRF/Collabtive/manageuser.php`, we add the following
+"/var/www/CSRF /Collabtive/manageuser.php", we add the following
 validation check inside the first logical if statement (which checks
 that our action is not one of "login", "logout", "resetpassword", or
 "loginerror", so it will pass for "edit").
@@ -386,4 +390,4 @@ Detailed in Tasks Section
 
 * References
 
-Du, Wenliang. 2006-2013. "Cross-Site Request Forgery (CSRF) Attack Lab". http://www.cis.syr.edu/~wedu/seed/Labs/Web/CSRF_Collabtive/
+Du, Wenliang. 2006-2011. "Cross-Site Request Forgery (CSRF) Attack Lab". http://www.cis.syr.edu/~wedu/seed/Labs/Web/CSRF_Collabtive/
