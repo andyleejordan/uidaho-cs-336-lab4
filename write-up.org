@@ -296,7 +296,22 @@ This adds the hidden input 'sid', and on the clock of the form send
 button, assigns the value of the session cookie to the value of the
 sid input.
 
-Next we need to implement the SID validation.
+Next we need to implement the SID validation. In the file `/var/www/CSRF/Collabtive/manageuser.php`, we add the following validation check inside the first logical if statement (which checks that our action is not one of "login", "logout", "resetpassword", or "loginerror", so it will pass for "edit").
+
+#+begin_src php
+  if ($action == "edit" &&
+      $_COOKIE["PHPSESSID"] !=
+        str_replace("PHPSESSID=", "", getArrayVal($_POST, "sid"))) { 
+    echo("Cookie and SID unmatched");
+    die();
+  }
+#+end_src
+
+This checks if our action is an edit, and if so, it validates that the
+value of the cookie `$_COOKIE["PHPSESSID"]` against the value of the
+"sid" from the POST request (which has been parsed by str_replace to
+get rid of the extraneous string "PHPSESSID="). If they do not match,
+it echoes such and subsequently dies, denying the attack.
 * Code
 
 * Answers
