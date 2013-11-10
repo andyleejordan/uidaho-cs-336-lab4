@@ -65,8 +65,9 @@ credentials for both Ubuntu users and the mysql user.
 
 
 * Abstract
+
 The purpose of this report is to detail the implications of cross-site
-request forgery(CSRF) vulnerabilities. The CSRF attack detailed in
+request forgery (CSRF) vulnerabilities. The CSRF attack detailed in
 this lab allows a malicious site to inject an HTTP request into a
 trusted site's active user session in order to impersonate the user
 and forge their input. Beyond exploring the threat this vulnerability
@@ -77,6 +78,31 @@ this type of attack.
 * Problem and Background
 
 * Problem Detail
+
+For this lab we were tasked with attacking the open-source web
+application Collabtive via a cross-site request forgery, and then
+implementing a secret-token based counter-measure to the attack.
+
+The vulnerability exploited in this lab exists because Collabtive
+fails to properly verify HTTP POST requests sent from its user edit
+form (revealed by the "Edit" in the "My Account" page for a given
+user). It trusts that any POST request from a logged-in user is valid,
+based solely on the user having an authenticated session cookie.
+
+Because of this, we can make an HTML page (the cross-site) which
+generates a hidden form with our forged input, and sends it via a POST
+request initiated through a JavaScript function call. If this site
+were accidentally loaded by the user (say, through a malicious
+advertisement), then our forged request would be sent to the server
+and look just as if it was a valid request made by the user.
+
+CSRF attacks are easily mitigated through better authentication
+techniques. In this lab we explore the use of a secret-token, passed
+with the form when a user generates a valid POST request, but
+unobtainable (save for a man-in-the-middle attack, but if that is
+available, there are worse ways to cause harm) by the
+attacker. Without the secret token, the forged request will be
+recognized as unauthenticated and the attack will fail.
 
 * Tasks
 ** Task 0: Setup the VM
