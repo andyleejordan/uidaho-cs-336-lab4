@@ -72,6 +72,7 @@ credentials for both Ubuntu users and the mysql user.
 
 * Tasks
 ** Task 0: Setup the VM
+
 Our first task is to properly setup the provided virtual machine
 environment in which we will complete this lab. We are given an Ubuntu
 Desktop 11.04 VM, and the first order of business is to lock it
@@ -79,7 +80,9 @@ down. To do this we set its virtual network adaptor to "Internal
 Network" so that it cannot communicate with any other machine, then we
 change the credentials of both Ubuntu users and the MySQL user
 (although the latter is not used in this lab).
+
 ** Task 1: Modifying the Victim's Profile
+
 Before we can modify the victim's profile, we need to capture a POST
 request of the user submitting the edit profile form (as it is this
 request we will be forging). To do this, we opened up Collabtive,
@@ -268,6 +271,7 @@ destination server cannot distinguish the forged request because it
 trusts (through the browser's cookie) the user's authentication.
 
 ** Task 2: Implementing a countermeasure for Collabtive
+
 Because cross-site request forgeries depend on the server blindly
 reauthenticating the user through their cookie (which is obviously
 quite vulnerable), protecting a web application from an CSRF attack is
@@ -292,11 +296,15 @@ template file located at
 ...
 #+end_src
 
-This adds the hidden input 'sid', and on the clock of the form send
+This adds the hidden input 'sid', and on the click of the form send
 button, assigns the value of the session cookie to the value of the
 sid input.
 
-Next we need to implement the SID validation. In the file `/var/www/CSRF/Collabtive/manageuser.php`, we add the following validation check inside the first logical if statement (which checks that our action is not one of "login", "logout", "resetpassword", or "loginerror", so it will pass for "edit").
+Next we need to implement the SID validation. In the file
+`/var/www/CSRF/Collabtive/manageuser.php`, we add the following
+validation check inside the first logical if statement (which checks
+that our action is not one of "login", "logout", "resetpassword", or
+"loginerror", so it will pass for "edit").
 
 #+begin_src php
   if ($action == "edit" &&
@@ -311,10 +319,25 @@ This checks if our action is an edit, and if so, it validates that the
 value of the cookie `$_COOKIE["PHPSESSID"]` against the value of the
 "sid" from the POST request (which has been parsed by str_replace to
 get rid of the extraneous string "PHPSESSID="). If they do not match,
-it echoes such and subsequently dies, denying the attack.
+it echoes such and subsequently dies, denying the attack. Note also
+that this approach does not require a JavaScript string operation,
+only the PHP str_replace() function.
+
+With the countermeasure implemented, we attempt to re-execute our
+prior attack. This fails as expected, with the message "Cookie and SID
+unmatched". We can get around this by capturing a POST session of the
+user containing either the SID or cookie value, and then replicating
+this in our forged request. However, this would require a live
+man-the-middle attack to gain the necessary data. Without this
+information, we cannot get around this defense.
+
 * Code
 
+Detailed in Tasks Section
+
 * Answers
+
+Detailed in Tasks Section
 
 * References
 
