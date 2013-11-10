@@ -1,0 +1,81 @@
+#+TITLE: 2013-FA-CS-336-LA-04-AndyS-SheaN
+#+AUTHOR: Andrew Schwartzmeyer, Shea Newton
+#+OPTIONS: toc:nil num:nil
+
+| Year and Semester: | 2013 FALL                         |
+| Course Number:     | CS-336                            |
+| Course Title:      | Intro. to Information Assurance   |
+| Work Number:       | LA-04                             |
+| Work Name:         | Cross-Site Request Forgery        |
+| Work Version:      | Version 1                         |
+| Long Date:         | Tuesday, 10 November 2013         |
+| Author Name:       | Andrew Schwartzmeyer, Shea Newton |
+
+* TODO LA-04 NetSec  ::noexport::
+   DEADLINE: <2013-11-10 Sun>
+For this laboratory assignment please follow the instructions in the
+laboratory in the link below and for preparing your laboratory report
+please follow the instructions in this posting plus all the guidelines
+posted within this course site under Course Info -> Coursework
+Submission Instructions -> LA-Laboratory Report Submissions.
+
+Cross-Site Request Forgery
+
+Laboratory Instructions:
+
+http://www.cis.syr.edu/~wedu/seed/Labs/Web/CSRF_Collabtive/
+
+These laboratories have been developed by Wenliang Du of Syracuse
+University and collaborators with sponsorship from the National
+Science Foundation (NSF).
+
+This is a group assignment (groups of 2 that will be determined in
+class). Please submit a laboratory report as described within this
+course site. Both students in the group will obtain the same grade and
+only one student in the group needs to submit.
+
+Additional Requirements:
+
+0) When you create the VM it is mandatory that you configure the
+   virtual Network to Internal Network.
+
+VERY IMPORTANT: Before starting the laboratory please change the logon
+credentials for both Ubuntu users and the mysql user.
+
+1) In addition to describing with detail all the steps you carried out
+   and their corresponding rationale and answering all the questions
+   posted within the linked lab, please do the following:
+
+2) Comment the code with high detail and include in your laboratory
+   report those relevant portions of the code and their corresponding
+   non-vulnerable versions.
+
+3) Clearly specify, for example by highlighting, where the presented
+   code is vulnerable.
+
+4) Present a new version of the code that is not vulnerable, even when
+   compiled and run with all compiler and system protection mechanisms
+   disabled. Show, in the description and experimentally, that your
+   improved version does not contain the same vulnerability.
+
+5) Prepare and submit a laboratory report in PDF following the
+   guidelines posted within this course site under Course Info ->
+   Coursework Submission Instructions -> LA-Laboratory Report
+   Submissions.
+
+
+* Abstract
+
+* Problem and Background
+
+* Problem Detail
+
+* Tasks
+
+* Code
+
+* Answers
+
+* References
+
+Du, Wenliang. 2006-2013. "Cross-Site Request Forgery (CSRF) Attack Lab". http://www.cis.syr.edu/~wedu/seed/Labs/Web/CSRF_Collabtive/
