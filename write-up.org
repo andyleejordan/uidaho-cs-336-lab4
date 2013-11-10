@@ -9,7 +9,7 @@
 | Work Name:         | Cross-Site Request Forgery        |
 | Work Version:      | Version 1                         |
 | Long Date:         | Tuesday, 10 November 2013         |
-| Author Name:       | Andrew Schwartzmeyer, Shea Newton |
+| Author Names:      | Andrew Schwartzmeyer, Shea Newton |
 
 * TODO LA-04 NetSec  ::noexport::
    DEADLINE: <2013-11-10 Sun>
@@ -71,7 +71,15 @@ credentials for both Ubuntu users and the mysql user.
 * Problem Detail
 
 * Tasks
-** Task #1: Modifying the Victim's Profile
+** Task 0: Setup the VM
+Our first task is to properly setup the provided virtual machine
+environment in which we will complete this lab. We are given an Ubuntu
+Desktop 11.04 VM, and the first order of business is to lock it
+down. To do this we set its virtual network adaptor to "Internal
+Network" so that it cannot communicate with any other machine, then we
+change the credentials of both Ubuntu users and the MySQL user
+(although the latter is not used in this lab).
+** Task 1: Modifying the Victim's Profile
 Before we can modify the victim's profile, we need to capture a POST
 request of the user submitting the edit profile form (as it is this
 request we will be forging). To do this, we opened up Collabtive,
