@@ -86,7 +86,7 @@ and a malicious site. The key to this type of attack is a victim
 visiting the malicious site while logged into an active session with
 their trusted site. The malicious site is able to forge the HTTP GET
 and HTTP POST requests in order to impersonate or "compromise the
-integrity" of the trusted site. [DU 3]
+integrity" of the trusted site. [Du 3]
 
 * Problem Detail
 
